@@ -9,7 +9,6 @@ import usersRouter from "./users";
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -19,12 +18,13 @@ app.use(express.json());
 app.use("/api/users", usersRouter);
 app.use("/api/tasks", tasksRouter);
 
-// Serverless handler
+// Serverless handler for Vercel deployment
 export const handler = serverless(app);
 
-// Local development for testing
+// Local development for testing (only for local environment)
 if (process.env.NODE_ENV === "development") {
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running locally on http://localhost:${PORT}`);
   });
 }
