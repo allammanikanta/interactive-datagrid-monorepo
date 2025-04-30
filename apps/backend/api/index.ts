@@ -19,7 +19,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/tasks", tasksRouter);
 
 // Serverless handler for Vercel deployment
-export const handler = serverless(app);
+const handler = serverless(app);
 
 // Local development for testing (only for local environment)
 if (process.env.NODE_ENV === "development") {
@@ -28,3 +28,6 @@ if (process.env.NODE_ENV === "development") {
     console.log(`Server running locally on http://localhost:${PORT}`);
   });
 }
+
+// Export the handler for serverless deployment
+export default handler;
