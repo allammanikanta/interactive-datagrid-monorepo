@@ -19,7 +19,7 @@ export const LinkCellRenderer = React.memo(
         href={`/${value}`} // Assuming the value is a path
         target="_blank" // Open link in a new tab
         rel="noopener noreferrer" // Prevents security vulnerabilities
-        style={{ color: "blue", textDecoration: "underline" }}
+        style={{ color: "#A27CB8", textDecoration: "none" }}
       >
         {value}
       </a>

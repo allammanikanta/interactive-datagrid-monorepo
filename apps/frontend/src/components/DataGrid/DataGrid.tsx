@@ -4,9 +4,10 @@ import {
   GridRenderCellParams,
   GridRenderEditCellParams,
 } from "@mui/x-data-grid";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
-import { columns as columnDefs, rows } from "../../utils/constants";
+import { usePaginatedTasks } from "../../hooks/useTasks";
+import { columns as columnDefs } from "../../utils/constants";
 import { CellEditorRegistry } from "./CellEditorRegistry";
 import { CellRendererRegistry } from "./CellRendererRegistry";
 import { setupCellEditors } from "./setupCellEditors";
@@ -16,7 +17,31 @@ import { setupCellRenderers } from "./setupCellRenderers";
 setupCellRenderers();
 setupCellEditors();
 
-const CustomDataGridComponent: React.FC = () => {
+const CustomDataGridComponent = () => {
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+
+  // Fetch paginated data using the custom hook
+  const { data, isLoading } = usePaginatedTasks(
+    paginationModel.page,
+    paginationModel.pageSize
+  );
+
+  const rowCountRef = React.useRef(data?.totalRowCount || 0);
+
+  const rowCount = React.useMemo(() => {
+    if (data?.rowCount !== undefined) {
+      rowCountRef.current = data.rowCount;
+    }
+    return rowCountRef.current;
+  }, [data?.rowCount]);
+
+  // const rowCount = useMemo(() => {
+  //   return data?.rowCount;
+  // }, [data]);
+
   const columns = useMemo(
     () =>
       columnDefs.map((colDef) => {
@@ -62,27 +87,49 @@ const CustomDataGridComponent: React.FC = () => {
   );
 
   return (
-    <Box sx={{ height: 500, width: "100%" }}>
+    <Box sx={{ height: 450, width: "100%" }}>
       <DataGrid
-        rows={rows}
+        rows={data?.rows || []} // Use the fetched data
+        rowCount={rowCount} // Total number of rows for server-side pagination
         columns={columns}
         getRowId={(row) => row.id}
         disableRowSelectionOnClick
         initialState={{
           pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
+            paginationModel: paginationModel,
           },
         }}
+        loading={isLoading}
         pageSizeOptions={[5, 10, 20]}
+        paginationMode="server" // Enable server-side pagination
+        paginationModel={paginationModel}
+        onPaginationModelChange={(newPaginationModel) => {
+          setPaginationModel(newPaginationModel); // Update the page and page size when pagination changes
+        }}
+        sx={{
+          // Styling for the column headers
+          "& .MuiDataGrid-columnHeader": {
+            backgroundColor: "#816EC7",
+            color: "white",
+            fontWeight: 600,
+            fontSize: 14,
+            borderBottom: "2px solid #816EC7",
+          },
+          // Styling for pagination controls
+          "& .MuiPaginationItem-root": {
+            color: "#816EC7",
+          },
+          // Styling for the footer pagination
+          "& .MuiTablePagination-root": {
+            color: "#816EC7",
+          },
+        }}
       />
     </Box>
   );
 };
 
 // Memoized the component to prevent unnecessary re-renders
-// React.memo will do a shallow comparison of props and only re-render if they change
 const CustomDataGrid = React.memo(CustomDataGridComponent);
 
 export default CustomDataGrid;

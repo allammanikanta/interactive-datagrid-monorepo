@@ -16,5 +16,11 @@ export const TagCellRenderer = React.memo(({ value }: CellRendererProps) => {
     return <span>-</span>;
   }
 
-  return <Chip label={value} />;
+  return (
+    <Chip
+      label={value}
+      variant="outlined"
+      style={{ color: "#E5989B", borderColor: "#E5989B" }}
+    />
+  );
 });

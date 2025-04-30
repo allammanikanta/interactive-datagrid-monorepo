@@ -61,7 +61,14 @@ export const UserMultiSelectCellRenderer = React.memo(
     );
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          cursor: "pointer",
+        }}
+      >
         {visibleUsers.map((user) => (
           <div
             key={user.id}
@@ -69,7 +76,6 @@ export const UserMultiSelectCellRenderer = React.memo(
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              cursor: "pointer",
             }}
           >
             <img
@@ -94,7 +100,6 @@ export const UserMultiSelectCellRenderer = React.memo(
         {overflowCount > 0 && (
           <Tooltip title={tooltipContent}>
             <span
-              title={`${overflowCount} more`}
               style={{
                 width: "24px",
                 height: "24px",
