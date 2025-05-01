@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { BaseUrl } from "../utils/constants";
 import useDebounce from "./useDebounce";
 
 export interface Task {
@@ -12,7 +13,9 @@ export interface Task {
 
 // Function to fetch paginated tasks data from the backend
 const fetchPaginatedRows = async (page: number, pageSize: number) => {
-  const res = await fetch(`/api/tasks?page=${page + 1}&pageSize=${pageSize}`);
+  const res = await fetch(
+    `${BaseUrl}/api/tasks?page=${page + 1}&pageSize=${pageSize}`
+  );
   if (!res.ok) {
     throw new Error("Failed to fetch tasks");
   }

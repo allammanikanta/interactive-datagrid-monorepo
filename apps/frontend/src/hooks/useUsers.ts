@@ -5,17 +5,20 @@
  */
 import { useQuery } from "@tanstack/react-query";
 
+import { BaseUrl } from "../utils/constants";
+
 export interface User {
   id: number;
   name: string;
   avatar?: string;
 }
 
+
 export const useUsers = () => {
   return useQuery<User[]>({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("/api/users");
+      const res = await fetch(`${BaseUrl}/api/users`);
       if (!res.ok) {
         throw new Error("Failed to fetch users");
       }

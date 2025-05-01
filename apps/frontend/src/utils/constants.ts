@@ -1,5 +1,7 @@
 import { ColumnDefinition } from "../types/dataGridTypes";
 
+export const BaseUrl = import.meta.env.VITE_APP_BACKEND_URL;
+
 export const columns: ColumnDefinition[] = [
   {
     field: "id",
