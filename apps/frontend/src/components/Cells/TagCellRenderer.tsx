@@ -10,17 +10,19 @@ import { Chip } from "@mui/material";
 import React from "react";
 
 import { CellRendererProps } from "../../types/dataGridTypes";
+import { DATAGRID_CHIP_COLOR } from "../../utils/constants";
+import EmptyCell from "../EmptyCell";
 
 export const TagCellRenderer = React.memo(({ value }: CellRendererProps) => {
   if (typeof value !== "string") {
-    return <span>-</span>;
+    return <EmptyCell />;
   }
 
   return (
     <Chip
       label={value}
       variant="outlined"
-      style={{ color: "#E5989B", borderColor: "#E5989B" }}
+      style={{ color: DATAGRID_CHIP_COLOR, borderColor: DATAGRID_CHIP_COLOR }}
     />
   );
 });

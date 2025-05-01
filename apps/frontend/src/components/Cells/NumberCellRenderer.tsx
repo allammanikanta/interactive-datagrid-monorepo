@@ -8,10 +8,11 @@
 import React from "react";
 
 import { CellRendererProps } from "../../types/dataGridTypes";
+import EmptyCell from "../EmptyCell";
 
 export const NumberCellRenderer = React.memo(({ value }: CellRendererProps) => {
   if (typeof value !== "number") {
-    return <span>-</span>;
+    return <EmptyCell />;
   }
   return <span>{value.toLocaleString()}</span>;
 });

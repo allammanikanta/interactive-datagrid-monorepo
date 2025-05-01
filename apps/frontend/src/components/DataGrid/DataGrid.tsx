@@ -7,7 +7,15 @@ import {
 import React, { useMemo, useState } from "react";
 
 import { usePaginatedTasks } from "../../hooks/useTasks";
-import { columns as columnDefs } from "../../utils/constants";
+import {
+  APP_THEME_COLOR,
+  columns as columnDefs,
+  DATAGRID_DEAULT_PAGE_NUM,
+  DATAGRID_HEIGHT,
+  DATAGRID_MIN_WIDTH,
+  DATAGRID_PAGE_SIZE,
+  DATAGRID_PAGE_SIZE_OPTIONS,
+} from "../../utils/constants";
 import { CellEditorRegistry } from "./CellEditorRegistry";
 import { CellRendererRegistry } from "./CellRendererRegistry";
 import { setupCellEditors } from "./setupCellEditors";
@@ -19,8 +27,8 @@ setupCellEditors();
 
 const CustomDataGridComponent = () => {
   const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 5,
+    page: DATAGRID_DEAULT_PAGE_NUM,
+    pageSize: DATAGRID_PAGE_SIZE,
   });
 
   // Fetch paginated data using the custom hook
@@ -48,6 +56,7 @@ const CustomDataGridComponent = () => {
           field: colDef.field,
           headerName: colDef.headerName,
           flex: 1,
+          minWidth: DATAGRID_MIN_WIDTH,
           renderCell: Renderer
             ? (params: GridRenderCellParams) => {
                 const adaptedProps = {
@@ -83,10 +92,10 @@ const CustomDataGridComponent = () => {
   );
 
   return (
-    <Box sx={{ height: 450, width: "100%" }}>
+    <Box sx={{ height: DATAGRID_HEIGHT }}>
       <DataGrid
-        rows={data?.rows || []} // Use the fetched data
-        rowCount={rowCount} // Total number of rows for server-side pagination
+        rows={data?.rows || []}
+        rowCount={rowCount}
         columns={columns}
         getRowId={(row) => row.id}
         disableRowSelectionOnClick
@@ -101,7 +110,7 @@ const CustomDataGridComponent = () => {
             variant: "skeleton",
           },
         }}
-        pageSizeOptions={[5, 10, 20]}
+        pageSizeOptions={DATAGRID_PAGE_SIZE_OPTIONS}
         paginationMode="server" // Enable server-side pagination
         paginationModel={paginationModel}
         onPaginationModelChange={(newPaginationModel) => {
@@ -110,19 +119,19 @@ const CustomDataGridComponent = () => {
         sx={{
           // Styling for the column headers
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#816EC7",
+            backgroundColor: APP_THEME_COLOR,
             color: "white",
             fontWeight: 600,
             fontSize: 14,
-            borderBottom: "2px solid #816EC7",
+            borderBottom: `2px solid ${APP_THEME_COLOR}`,
           },
           // Styling for pagination controls
           "& .MuiPaginationItem-root": {
-            color: "#816EC7",
+            color: APP_THEME_COLOR,
           },
           // Styling for the footer pagination
           "& .MuiTablePagination-root": {
-            color: "#816EC7",
+            color: APP_THEME_COLOR,
           },
         }}
       />

@@ -8,18 +8,20 @@
 import React from "react";
 
 import { CellRendererProps } from "../../types/dataGridTypes";
+import { APP_THEME_COLOR } from "../../utils/constants";
+import EmptyCell from "../EmptyCell";
 
 export const LinkCellRenderer = React.memo(
   ({ value }: CellRendererProps<string>) => {
     if (typeof value !== "string") {
-      return <span>-</span>;
+      return <EmptyCell />;
     }
     return (
       <a
         href={`/${value}`} // Assuming the value is a path
         target="_blank" // Open link in a new tab
         rel="noopener noreferrer" // Prevents security vulnerabilities
-        style={{ color: "#A27CB8", textDecoration: "none" }}
+        style={{ color: APP_THEME_COLOR, textDecoration: "none" }}
       >
         {value}
       </a>

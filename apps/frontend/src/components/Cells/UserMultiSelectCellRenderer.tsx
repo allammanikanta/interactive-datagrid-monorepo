@@ -6,10 +6,12 @@
  * The component uses Material-UI's Tooltip component to display the list of users in a tooltip when hovered over.
  *
  */
-import { Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import React from "react";
 
 import { CellRendererProps } from "../../types/dataGridTypes";
+import EmptyCell from "../EmptyCell";
+import UserAvatar from "../UserAvatar";
 
 interface User {
   id: number;
@@ -20,7 +22,7 @@ interface User {
 export const UserMultiSelectCellRenderer = React.memo(
   ({ value }: CellRendererProps<User[]>) => {
     if (!Array.isArray(value) || value.length === 0) {
-      return <span>-</span>;
+      return <EmptyCell />;
     }
 
     const maxVisible = 1;
@@ -29,8 +31,8 @@ export const UserMultiSelectCellRenderer = React.memo(
     const overflowCount = overflowUsers.length;
 
     const tooltipContent = (
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           flexDirection: "column",
           gap: "8px",
@@ -38,31 +40,14 @@ export const UserMultiSelectCellRenderer = React.memo(
         }}
       >
         {overflowUsers.map((user) => (
-          <div
-            key={user.id}
-            style={{ display: "flex", alignItems: "center", gap: "8px" }}
-          >
-            <img
-              src={user.avatar}
-              alt={user.name}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "1px solid white",
-                boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-              }}
-            />
-            <span style={{ fontSize: "14px" }}>{user.name}</span>
-          </div>
+          <UserAvatar key={user.id} name={user.name} avatar={user.avatar} />
         ))}
-      </div>
+      </Box>
     );
 
     return (
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           alignItems: "center",
           gap: "6px",
@@ -70,37 +55,13 @@ export const UserMultiSelectCellRenderer = React.memo(
         }}
       >
         {visibleUsers.map((user) => (
-          <div
-            key={user.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <img
-              src={user.avatar}
-              alt={user.name}
-              title={user.name}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "1px solid white",
-                boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-              }}
-            />
-            <span style={{ fontSize: "14px", fontWeight: 500 }}>
-              {user.name}
-            </span>
-          </div>
+          <UserAvatar key={user.id} name={user.name} avatar={user.avatar} />
         ))}
 
         {overflowCount > 0 && (
           <Tooltip title={tooltipContent}>
-            <span
-              style={{
+            <Box
+              sx={{
                 width: "24px",
                 height: "24px",
                 borderRadius: "50%",
@@ -114,10 +75,10 @@ export const UserMultiSelectCellRenderer = React.memo(
               }}
             >
               +{overflowCount}
-            </span>
+            </Box>
           </Tooltip>
         )}
-      </div>
+      </Box>
     );
   }
 );

@@ -9,6 +9,7 @@
 import {
   Autocomplete,
   Avatar,
+  Box,
   CircularProgress,
   TextField,
 } from "@mui/material";
@@ -16,6 +17,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { useUsers } from "../../hooks/useUsers";
 import { CellEditorProps } from "../../types/dataGridTypes";
+import { ERROR_LOADING_USERS, PRIMARY_COLOR } from "../../utils/constants";
 
 interface User {
   id: number;
@@ -35,7 +37,7 @@ export const UserMultiSelectCellEditor = React.memo(
     const handleUserChange = React.useCallback(
       (_: React.SyntheticEvent<Element, Event>, newValue: User[]) => {
         setSelectedUsers(newValue);
-        onChange(newValue); // Pass new value to parent
+        onChange(newValue);
       },
       [onChange]
     );
@@ -68,11 +70,11 @@ export const UserMultiSelectCellEditor = React.memo(
     }
 
     if (error) {
-      return <div>Error loading users.</div>;
+      return <div>{ERROR_LOADING_USERS}</div>;
     }
 
     return (
-      <div ref={containerRef}>
+      <Box ref={containerRef}>
         <Autocomplete
           multiple
           options={users}
@@ -101,16 +103,14 @@ export const UserMultiSelectCellEditor = React.memo(
           )}
           renderValue={(selected) => {
             if (selected.length === 0) {
-              return <span style={{ color: "#888" }}>No assignees</span>;
+              return <span style={{ color: PRIMARY_COLOR }}>No assignees</span>;
             }
 
             const visibleUser = selected[0];
             const overflowCount = selected.length - 1;
 
             return (
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "6px" }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <Avatar
                   src={visibleUser.avatar}
                   alt={visibleUser.name}
@@ -140,14 +140,14 @@ export const UserMultiSelectCellEditor = React.memo(
                     +{overflowCount}
                   </span>
                 )}
-              </div>
+              </Box>
             );
           }}
           renderInput={(params) => <TextField {...params} variant="outlined" />}
           size="small"
           fullWidth
         />
-      </div>
+      </Box>
     );
   }
 );
