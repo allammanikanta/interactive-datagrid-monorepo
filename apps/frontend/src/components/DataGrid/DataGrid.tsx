@@ -38,10 +38,6 @@ const CustomDataGridComponent = () => {
     return rowCountRef.current;
   }, [data?.rowCount]);
 
-  // const rowCount = useMemo(() => {
-  //   return data?.rowCount;
-  // }, [data]);
-
   const columns = useMemo(
     () =>
       columnDefs.map((colDef) => {
@@ -100,6 +96,11 @@ const CustomDataGridComponent = () => {
           },
         }}
         loading={isLoading}
+        slotProps={{
+          loadingOverlay: {
+            variant: "skeleton",
+          },
+        }}
         pageSizeOptions={[5, 10, 20]}
         paginationMode="server" // Enable server-side pagination
         paginationModel={paginationModel}
