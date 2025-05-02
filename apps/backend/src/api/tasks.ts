@@ -210,4 +210,29 @@ router.get("/", (req, res) => {
   });
 });
 
+// Endpoint to update a specific task
+router.put("/update/:id", (req, res) => {
+  console.log("Update task endpoint hit");
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  // Find the task by id
+  const taskIndex = rows.findIndex((task) => task.id === id);
+  if (taskIndex === -1) {
+    return res.status(404).json({ message: "Task not found" });
+  }
+
+  // Update the task with the new values
+  const task = rows[taskIndex];
+  for (const [key, value] of Object.entries(updatedData)) {
+    if (key in task) {
+      (task as any)[key] = value; // Update each field with the new value
+    }
+  }
+
+  res
+    .status(200)
+    .json({ message: "Task updated successfully", updatedTask: task });
+});
+
 export default router;

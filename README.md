@@ -1,6 +1,6 @@
 # Interactive Data Grid Component
 
-A type-safe, pluggable, and performant Data Grid component built with React and TypeScript, featuring dynamic cell rendering/editing and multi-user assignment functionality.
+The project is an interactive data grid built with **React**, **TypeScript**, **Material-UI**, and **React Query**. It handles different data types through a **pluggable registry** of custom cell renderers and editors, offers **server-side pagination** and **multi-select user assignment**, and persists edits (like assignee changes) to the backend(in-memory). Edits apply optimistically in the UI and inline notifications on error, ensuring a snappy, resilient experience. Designed for flexibility and reuse, the grid scales easily as you add new data types or features.
 
 **Tech Stack: Vite · React · TypeScript · Express · Node.js · MUI · React Query**
 

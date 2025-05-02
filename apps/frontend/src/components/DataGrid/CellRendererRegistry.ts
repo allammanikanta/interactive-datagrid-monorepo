@@ -1,4 +1,10 @@
-import { CellRenderer } from '../../types/dataGridTypes';
+/**
+ *
+ * Cell Renderer Registry for DataGrid
+ * Responsible for managing the registration and retrieval of cell renderers
+ *
+ */
+import { CellRenderer } from "../../types/dataGridTypes";
 
 const registry = new Map<string, CellRenderer>();
 

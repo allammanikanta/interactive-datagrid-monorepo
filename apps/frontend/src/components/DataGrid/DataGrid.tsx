@@ -4,18 +4,21 @@ import {
   GridRenderCellParams,
   GridRenderEditCellParams,
 } from "@mui/x-data-grid";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { usePaginatedTasks } from "../../hooks/useTasks";
+import useUpdateTaskApi from "../../hooks/useUpdateTask";
 import {
   APP_THEME_COLOR,
   columns as columnDefs,
   DATAGRID_DEAULT_PAGE_NUM,
+  DATAGRID_ERROR_MESSAGE,
   DATAGRID_HEIGHT,
   DATAGRID_MIN_WIDTH,
   DATAGRID_PAGE_SIZE,
   DATAGRID_PAGE_SIZE_OPTIONS,
 } from "../../utils/constants";
+import SnackbarNotifier from "../SnackbarNotifier";
 import { CellEditorRegistry } from "./CellEditorRegistry";
 import { CellRendererRegistry } from "./CellRendererRegistry";
 import { setupCellEditors } from "./setupCellEditors";
@@ -31,6 +34,10 @@ const CustomDataGridComponent = () => {
     pageSize: DATAGRID_PAGE_SIZE,
   });
 
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string }>({
+    open: false,
+    message: "",
+  });
   // Fetch paginated data using the custom hook
   const { data, isLoading } = usePaginatedTasks(
     paginationModel.page,
@@ -46,6 +53,30 @@ const CustomDataGridComponent = () => {
     return rowCountRef.current;
   }, [data?.rowCount]);
 
+  const updateTaskApi = useUpdateTaskApi();
+
+  // Handle cell commit by delegating to the hook
+  const handleCellEditCommit = useCallback(
+    async (params: GridRenderEditCellParams) => {
+      const { id, field, value, api, row } = params;
+      const originalValue = row[field];
+
+      try {
+        await updateTaskApi(id as string, field, value);
+      } catch {
+        // Taking the optimistic approach and reverting the cell value
+        // if the API call fails
+        api.setEditCellValue({ id, field, value: originalValue });
+        setSnackbar({
+          open: true,
+          message: DATAGRID_ERROR_MESSAGE,
+        });
+      }
+    },
+    [updateTaskApi]
+  );
+
+  // Define columns using the column definitions for the data grid
   const columns = useMemo(
     () =>
       columnDefs.map((colDef) => {
@@ -62,7 +93,7 @@ const CustomDataGridComponent = () => {
                 const adaptedProps = {
                   value: params.value,
                   rowData: params.row,
-                  column: colDef, // from your `ColumnDefinition[]`
+                  column: colDef,
                 };
                 return <Renderer {...adaptedProps} />;
               }
@@ -74,22 +105,27 @@ const CustomDataGridComponent = () => {
                   rowData: params.row,
                   column: colDef,
                   onChange: (newValue: unknown) => {
-                    params.api.setEditCellValue({
-                      id: params.id,
-                      field: params.field,
+                    const updatedParams = {
+                      ...params,
                       value: newValue,
-                    });
+                    };
+                    params.api.setEditCellValue(updatedParams);
+                    handleCellEditCommit(updatedParams);
                   },
                 };
-                return <Editor {...adaptedProps} />;
+                return Editor && <Editor {...adaptedProps} />;
               }
             : undefined,
 
           editable: !!Editor,
         };
       }),
-    []
+    [handleCellEditCommit]
   );
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((s) => ({ ...s, open: false }));
+  };
 
   return (
     <Box sx={{ height: DATAGRID_HEIGHT }}>
@@ -122,18 +158,17 @@ const CustomDataGridComponent = () => {
             backgroundColor: APP_THEME_COLOR,
             color: "white",
             fontWeight: 600,
-            fontSize: 14,
-            borderBottom: `2px solid ${APP_THEME_COLOR}`,
-          },
-          // Styling for pagination controls
-          "& .MuiPaginationItem-root": {
-            color: APP_THEME_COLOR,
           },
           // Styling for the footer pagination
           "& .MuiTablePagination-root": {
             color: APP_THEME_COLOR,
           },
         }}
+      />
+      <SnackbarNotifier
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={handleCloseSnackbar}
       />
     </Box>
   );

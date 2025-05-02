@@ -38,7 +38,10 @@ export const columns: ColumnDefinition[] = [
 export const PRIMARY_COLOR = "#343c6a";
 export const APP_THEME_COLOR = "#816EC7";
 export const HEADER = "Interactive Data Grid";
-export const FOOTER_MESSAGE = "*Please double click on assignees to edit";
+export const FOOTER_MESSAGE =
+  "*Please double click on Task Name/Summary/Volume/Assignees to edit";
+export const DATAGRID_ERROR_MESSAGE =
+  "Failed to save changes. Please try again.";
 
 // Datagrid Constants
 export const DATAGRID_HEIGHT = 450;
