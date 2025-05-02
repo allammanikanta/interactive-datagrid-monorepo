@@ -120,6 +120,7 @@ export const rows = [
   {
     id: "Task-007",
     task: "Sequence DNA C",
+    summary: "Summary",
     volume: 100,
     plasmid: "pGEM-T",
     assignee: [
@@ -134,6 +135,7 @@ export const rows = [
   {
     id: "Task-008",
     task: "Sequence DNA C",
+    summary: "",
     volume: 100,
     plasmid: "pGEM-T",
     assignee: [
@@ -144,6 +146,7 @@ export const rows = [
     id: "Task-009",
     task: "Sequence DNA C",
     volume: 100,
+    summary: "",
     plasmid: "pGEM-T",
     assignee: [
       {
@@ -158,6 +161,7 @@ export const rows = [
     id: "Task-010",
     task: "Sequence DNA C",
     volume: 100,
+    summary: "",
     plasmid: "pGEM-T",
     assignee: [
       {
@@ -192,6 +196,7 @@ export const rows = [
   {
     id: "Task-012",
     task: "Sequence DNA C",
+    summary: "",
     volume: 100,
     plasmid: "pGEM-T",
     assignee: [],

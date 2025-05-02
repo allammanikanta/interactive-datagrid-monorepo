@@ -29,6 +29,5 @@ export const usePaginatedTasks = (page: number, pageSize: number) => {
   return useQuery({
     queryKey: ["tasks", debouncedPage, debouncedPageSize],
     queryFn: () => fetchPaginatedRows(page, pageSize),
-    staleTime: 10000, // Based on the use case this can be adjusted
   });
 };
